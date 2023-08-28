@@ -1,0 +1,19 @@
+---
+- name: install needed packages
+  apt:
+    name:
+      - dovecot-core
+      - dovecot-imapd
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+    update_cache: yes
+    state: present
+
+- name: upload templated local configuration
+  ansible.builtin.template:
+    src: local.conf.j2
+    dest: /etc/dovecot/local.conf
+    owner: root
+    group: dovecot
+    mode: "0644"
+  notify: restart dovecot
+
